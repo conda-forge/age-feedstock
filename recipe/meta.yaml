@@ -1,5 +1,5 @@
 {% set name = "age" %}
-{% set version = "1.2.1" %}
+{% set version = "1.3.0" %}
 
 package:
   name: {{ name|lower }}
@@ -8,7 +8,7 @@ package:
 source:
   - folder: src
     url: https://github.com/FiloSottile/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 93bd89a16c74949ee7c69ef580d8e4cf5ce03e7d9c461b68cf1ace3e4017eef5
+    sha256: 71f69e5699a0b94aa1ca55b9b86b5bcf014f0c1412608a7a60b3e5fbbc553a77
 
 build:
   number: 0
