@@ -1,0 +1,54 @@
+schema_version: 1
+
+context:
+  name: age
+  version: 1.3.1
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/FiloSottile/${{ name }}/archive/refs/tags/v${{ version }}.tar.gz
+    sha256: 396007bc0bc53de253391493bda1252757ba63af1a19db86cfb60a35cb9d290a
+    target_directory: src
+
+build:
+  number: 1
+  script:
+    - cd src
+    - go-licenses save . --save_path ../library_licenses
+    - if: not win
+      then: go build -v -o $PREFIX/bin/age ./cmd/age
+    - if: not win
+      then: go build -v -o $PREFIX/bin/age-keygen ./cmd/age-keygen
+    - if: win
+      then: go build -v -o %LIBRARY_BIN%\age.exe .\cmd\age
+    - if: win
+      then: go build -v -o %LIBRARY_BIN%\age-keygen.exe .\cmd\age-keygen
+    # Clear out cache to avoid file not removable warnings
+    - if: unix
+      then: chmod -R u+w $(go env GOPATH) && rm -r $(go env GOPATH)
+
+requirements:
+  build:
+    - ${{ compiler('go-nocgo') }}
+    - go-licenses
+
+tests:
+  - script:
+      - age --help
+      - age-keygen --help
+
+about:
+  license: BSD-3-Clause
+  license_file:
+    - src/LICENSE
+    - library_licenses/
+  summary: age is a simple, modern and secure file encryption tool, format, and Go library.
+  homepage: https://github.com/FiloSottile/age
+  repository: https://github.com/FiloSottile/age
+
+extra:
+  recipe-maintainers:
+    - pavelzw
