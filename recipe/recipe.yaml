@@ -44,6 +44,16 @@ requirements:
     - go-licenses
 
 tests:
+  - package_contents:
+      strict: true
+      bin:
+        - age
+        - age-keygen
+        - age-inspect
+        - age-plugin-batchpass
+        - age-plugin-pq
+        - age-plugin-tag
+        - age-plugin-tagpq
   - script:
       - age --help
       - age-keygen --help
