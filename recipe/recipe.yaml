@@ -14,7 +14,7 @@ source:
     target_directory: src
 
 build:
-  number: 0
+  number: 1
   script:
     - cd src
     - go-licenses save . --save_path ../library_licenses
@@ -22,9 +22,19 @@ build:
       then:
         - go build -v -o $PREFIX/bin/age ./cmd/age
         - go build -v -o $PREFIX/bin/age-keygen ./cmd/age-keygen
+        - go build -v -o $PREFIX/bin/age-inspect ./cmd/age-inspect
+        - go build -v -o $PREFIX/bin/age-plugin-batchpass ./cmd/age-plugin-batchpass
+        - go build -v -o $PREFIX/bin/age-plugin-pq ./extra/age-plugin-pq
+        - go build -v -o $PREFIX/bin/age-plugin-tag ./extra/age-plugin-tag
+        - go build -v -o $PREFIX/bin/age-plugin-tagpq ./extra/age-plugin-tagpq
       else:
         - go build -v -o %LIBRARY_BIN%\age.exe .\cmd\age
         - go build -v -o %LIBRARY_BIN%\age-keygen.exe .\cmd\age-keygen
+        - go build -v -o %LIBRARY_BIN%\age-inspect.exe .\cmd\age-inspect
+        - go build -v -o %LIBRARY_BIN%\age-plugin-batchpass.exe .\cmd\age-plugin-batchpass
+        - go build -v -o %LIBRARY_BIN%\age-plugin-pq.exe .\extra\age-plugin-pq
+        - go build -v -o %LIBRARY_BIN%\age-plugin-tag.exe .\extra\age-plugin-tag
+        - go build -v -o %LIBRARY_BIN%\age-plugin-tagpq.exe .\extra\age-plugin-tagpq
     - if: unix
       then: chmod -R u+w $(go env GOPATH) && rm -r $(go env GOPATH)
 
@@ -34,9 +44,24 @@ requirements:
     - go-licenses
 
 tests:
+  - package_contents:
+      strict: true
+      bin:
+        - age
+        - age-keygen
+        - age-inspect
+        - age-plugin-batchpass
+        - age-plugin-pq
+        - age-plugin-tag
+        - age-plugin-tagpq
   - script:
       - age --help
       - age-keygen --help
+      - age-inspect --help
+      - age-plugin-batchpass --help
+      - age-plugin-pq --help
+      - age-plugin-tag --help
+      - age-plugin-tagpq --help
 
 about:
   license: BSD-3-Clause
